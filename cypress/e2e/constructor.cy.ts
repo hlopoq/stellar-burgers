@@ -32,11 +32,20 @@ describe('Burger Constructor Integration Tests', () => {
 
   describe('Constructor Functionality', () => {
     it('Should correctly add buns and ingredients to constructor', () => {
-      addIngredient('Краторная булка N-200i');
-      addIngredient('Флюоресцентная булка R2-D3');
+      cy.get('.constructor-element_pos_top').should('not.exist');
+      cy.get('.constructor-element_pos_bottom').should('not.exist');
 
+      addIngredient('Краторная булка N-200i');
+      checkBunPosition('Краторная булка N-200i', 'top');
+      checkBunPosition('Краторная булка N-200i', 'bottom');
+
+      addIngredient('Флюоресцентная булка R2-D3');
       checkBunPosition('Флюоресцентная булка R2-D3', 'top');
       checkBunPosition('Флюоресцентная булка R2-D3', 'bottom');
+
+      cy.contains('li', 'Соус традиционный галактический')
+        .find('.counter__num')
+        .should('not.exist');
 
       addIngredient('Соус традиционный галактический');
       addIngredient('Соус традиционный галактический');
@@ -50,6 +59,7 @@ describe('Burger Constructor Integration Tests', () => {
     };
 
     it('Should open and display ingredient details modal', () => {
+      modal().should('be.empty');
       openIngredientModal('Краторная булка N-200i');
       modal().within(() => {
         cy.contains('Детали ингредиента').should('be.visible');
@@ -74,6 +84,9 @@ describe('Burger Constructor Integration Tests', () => {
 
   describe('Order Creation Process', () => {
     it('Should complete order creation and reset constructor', () => {
+      cy.get('.constructor-element_pos_top').should('not.exist');
+      cy.contains('Выберите начинку').should('be.visible');
+
       addIngredient('Флюоресцентная булка R2-D3');
       addIngredient('Соус традиционный галактический');
       addIngredient('Соус традиционный галактический');
@@ -91,6 +104,7 @@ describe('Burger Constructor Integration Tests', () => {
       cy.get('.constructor-element_pos_top').should('not.exist');
     });
   });
+
   afterEach(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
