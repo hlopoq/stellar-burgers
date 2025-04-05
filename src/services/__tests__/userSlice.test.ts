@@ -84,7 +84,7 @@ describe('user slice tests', () => {
 
   describe('loginUser thunk tests', () => {
     const userData = {
-      email: 'test@mail.ru',
+      email: 'test@mail.com',
       name: 'TestUser',
       password: '123qwerty'
     };
